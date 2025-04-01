@@ -128,10 +128,14 @@ dataList = os.listdir(dataDir)
 #Movendo para a pasta de dados/uf
 os.chdir(dataDir)
 
+# Criando a lista para armazenar os DataFrames
+allFiles = []
+
 for fileInList in dataList:
     print(fileInList)
     dfConc= pd.read_csv(fileInList, encoding='latin1')
     allFiles.append(dfConc)
+    
 
 # Concatenando meus DataFrames
 allFiles = pd.concat(allFiles)
@@ -139,17 +143,17 @@ allFiles = pd.concat(allFiles)
 #Extraindo nomes das estações sem redundância 
 stations = pd.unique(allFiles['Estacao'])
 
-#Usando lógica 
-stationDf = allFiles(allFiles['Estacao'== station[0]])
+# Usando lógica...
+stationDf = allFiles[allFiles['Estacao'] == stations[0]]
 
 #Criando coluna datatime
-datetieDf = pd.to_datetime(stationDf.Data, format = '%Y-%m-%d')
+datetimeDf = pd.to_datetime(stationDf.Data, format = '%Y-%m-%d')
 
 #criando coluna datetime dentro de stationDf
 stationDf['datetime'] = datetimeDf
 
 # Trandformando a coluna de datetime em index
-stationDf = stationDf.set_index(stationDf['datatime'])
+stationDf = stationDf.set_index(stationDf['datetime'])
 
 #Extrair o ano 
 stationDf['year'] = stationDf.index.year
@@ -159,8 +163,10 @@ stationDf['day'] = stationDf.index.day
 #extraindo a hora 
 horas = stationDf.Hora.str.split(':')
 
+horaDf= []
+
 for hora in horas:
-    print(horas[0])
+    print(hora[0])
     horaDf.append(hora[0])
     
 stationDf['hour'] = horaDf
