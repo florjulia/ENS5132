@@ -171,7 +171,28 @@ for hora in horas:
     
 stationDf['hour'] = horaDf
 
-# Corrigindo a coluna datetime
+#%% Realizando a  tarefa 02 
+
+# Defininado local dos arquivos:
+outputDir = r"E:\UFSC 2025\ENS5132\data\MG_csv"
+
+# Grantindo que a pasta de saída exista 
+if not os.path.exists(outputDir):
+    os.makedirs(outputDir)
+     
+# Criando um arquivo para cada estação
+for station in stations:
+    stationDf = allFiles[allFiles['Estacao'] == station]
+    
+    # Criando um nome de arquivo sem caracteres especiais
+    fileName = f"{station.strip().replace(' ', '_').replace('/', '-')}.csv"
+    
+   # Juntando o diretório com o nome do arquivo
+    fullPath = os.path.join(outputDir, fileName)
+    
+    # Exporta para CSV
+    stationDf.to_csv(fullPath, index=False, encoding='latin1')
+#%% Corrigindo a coluna datetime
 
 stationDf['datetime'] = pd.to_datetime(stationDf.astype(str).year +
                                        stationDf.astype(str).month +
